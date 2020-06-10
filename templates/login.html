@@ -1,0 +1,93 @@
+{% block content %}
+<head>
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"> -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+  
+      {% if title %}
+          <title>Secureciti - {{ title }}</title>
+      {% else %}
+          <title>Secureciti</title>
+      {% endif %}
+  </head>
+  
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <div class="container">
+        <a class="navbar-brand mr-4" href="/">Secureciti</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggle">
+          <div class="navbar-nav mr-auto">
+            <a class="nav-item nav-link modal-trigger" data-target="modal-home" href="{{ url_for('home') }}">Home</a>
+            <a class="nav-item nav-link modal-trigger" data-target="modal-dashboard" href="{{ url_for('dashboard') }}">Dashboard</a>
+          </div>
+          <!-- Navbar Right Side -->
+          <div class="navbar-nav">
+            <!-- <a class="nav-item nav-link modal-trigger" data-target="modal-login" href="{{ url_for('login') }}">Login</a>-->
+            <a class="nav-item nav-link modal-trigger" data-target="modal-home" href="{{ url_for('register') }}">Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <body>
+    <center>
+<div class = "content-section" style="width: 500px; height: fit-content; margin-top: 110px;">
+    <form id="signinform" method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Login</legend>
+            <div id="signin-email" name="email" class="form-group">
+                {{ form.email.label(class="form-control-label") }}
+                {% if form.email.errors %}
+                {{ form.email(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.email.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.email(class="form-control form-control-lg") }}
+            {% endif %}
+            </div>
+            <div id="signin-password" name="password" class="form-group">
+                {{ form.password.label(class="form-control-label") }}
+                {% if form.password.errors %}
+                {{ form.password(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.password.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ form.password(class="form-control form-control-lg") }}
+            {% endif %}
+            </div>
+            <div class="form-check">
+                {{ form.remember(class="form-check-input") }}
+                {{ form.remember.label(class="form-check-label") }}
+            </div>
+        </fieldset>
+
+        <div id="submit" class = "form-group">
+            {{ form.signin(class="btn btn-outline-info") }}
+        </div>
+        
+        <small class="text-muted ml-2">
+            <a href="#">Forgot Password?</a>
+        </small>
+
+    </form>
+</div>
+<div class = "border-top " >
+    <small class = "text-muted" style="font-size: 15px;">
+        Need an account? <a class = "ml-2" href = "{{ url_for('register') }}">Sign Up</a>
+    </small>
+</div>
+</center>
+</body>
+{% endblock content %}

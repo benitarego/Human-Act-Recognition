@@ -1,0 +1,116 @@
+
+{% block content %}
+<head>
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"> -->
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+    {% if title %}
+        <title>Secureciti - {{ title }}</title>
+    {% else %}
+        <title>Secureciti</title>
+    {% endif %}
+    
+    <style>
+      /* DASHBOARD - Start*/
+  .sidenav {
+    height: 100%;
+    width: 230px;
+    margin-top: 50px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: black;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  .sidenav a {
+    padding: 6px 8px 6px 16px;
+    font-size: 20px;
+    color: #818181;
+    display: block;
+  }
+  
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+  .updateprofilemain {
+    margin-left: 230px;
+    margin-top: -15px; 
+    font-size: 20px;
+    padding: 0px 10px;
+    background-color:transparent;
+  }
+  
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+    </style>
+</head>
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="/">Secureciti</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link modal-trigger" data-target="modal-home" href="{{ url_for('home') }}">Home</a>
+                <!-- <a class="nav-item nav-link modal-trigger" data-target="modal-dashboard" href="{{ url_for('dashboard') }}">Dashboard</a> -->
+              </div>
+              <!-- Navbar Right Side -->
+              <div class="navbar-nav">
+                <!-- <a class="nav-item nav-link modal-trigger" data-target="modal-login" href="{{ url_for('login') }}">Login</a>-->
+                <a class="nav-item nav-link modal-trigger" data-target="modal-home" href="{{ url_for('home') }}"></a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <body>
+        <div class="sidenav">
+          <form action="/viewcamera/" method="post">
+            <button name="view" type="submit" style="cursor: pointer; color:grey; background-color: black; font-size: 23px; border-color: black;">
+              View Surviellance
+            </button>
+            {{ view_message }} 
+          </form>
+          
+          <form action="/update/" method="post">
+            <button name="update" type="submit" style="cursor: pointer; color:grey; background-color: black; font-size: 23px; border-color: black;">
+              Update Profile
+            </button>
+            {{ update_message }} 
+          </form>
+        </div>
+        <h2 style="margin-left: 250px;">Update Profile</h2>
+      <main role="main" class="container" style="margin-left: 230px;">
+        <div class="row">
+          <div class="col-md-8">
+              {% with messages =  get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+              {% endif %}
+              {% endwith %}
+          </div>       
+        </div>
+      </main>
+
+      <div class="updateprofilemain">
+        
+      </div>
+
+    </body>
+
+{% endblock content %}
