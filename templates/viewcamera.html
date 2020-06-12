@@ -39,7 +39,7 @@
     color: #f1f1f1;
   }
 
-  .viewcameramain {
+  .updateprofilemain {
     margin-left: 230px;
     margin-top: -15px; 
     font-size: 20px;
@@ -51,6 +51,14 @@
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
+
+  img {
+  	display: block;
+  	margin-left: 230px;
+  	margin-top: -25px;
+	  width: 1136px;
+    height: 570px;
+	}
     </style>
 </head>
     <header class="site-header">
@@ -90,28 +98,8 @@
             {{ update_message }} 
           </form>
         </div>
-      <!-- <main role="main" class="container" style="margin-left: 230px;">
-        <div class="row">
-          <div class="col-md-8">
-              {% with messages =  get_flashed_messages(with_categories=true) %}
-              {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-              {% endif %}
-              {% endwith %}
-          </div>       
-        </div>
-      </main> -->
-
-      <div class="viewcameramain">
-         <img id="bg" src="{{ url_for('view_camera') }}">
-      </div>
-
+        
+        <img id="bg" class="center" src="{{ url_for('video_feed') }}">
     </body>
 
 {% endblock content %}
-
-

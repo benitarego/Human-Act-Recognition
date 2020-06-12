@@ -1,6 +1,7 @@
 #import flask libraries
 from flask import Flask, render_template, url_for, flash, redirect, Response
 from forms import signupform, signinform
+from camera import VideoCamera
 
 #import firebase
 from google.cloud import storage
@@ -48,8 +49,6 @@ auth = firebase.auth()
 def home():
     return render_template('home.html', title='Home')
 
-
-
 @app.route('/dashboard')
 def dashboard():
     # form = signupform()
@@ -58,80 +57,27 @@ def dashboard():
 
 
 
-@app.route('/video_camera')
-def video_camera():
-    # cap = cv2.VideoCapture('queda.mp4')
+@app.route('/viewcamera/', methods=['POST'])
+def viewcamera():
+    view_message = "Updating profile..."
+    return render_template('viewcamera.html', forward_message=view_message)
 
-    # time.sleep(2)
-    
-    # fgbg = cv2.createBackgroundSubtractorMOG2()
-    # j = 0
-    
-    # account_sid = 'AC9ff3f227c0a9de0606351f3656ee2274'
-    # auth_token = '6eaec067e0c697309716afdc6e1c8a2a'
-    # client = Client(account_sid, auth_token)
 
-    # fall=0
-    # while(1):
-    #     count=0
-    #     ret, frame = cap.read()
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
-    #     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    #     fgmask = fgbg.apply(gray)
 
-    #     _ , contours, _ = cv2.findContours(fgmask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    #     if contours:
-    #         areas = []
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(VideoCamera()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
-    #         for contour in contours:
-    #             ar = cv2.contourArea(contour)
-    #             areas.append(ar)
-        
-    #             max_area = max(areas or [0])
 
-    #             max_area_index = areas.index(max_area)
 
-    #             cnt = contours[max_area_index]
-
-    #             M = cv2.moments(cnt)
-        
-    #             x, y, w, h = cv2.boundingRect(cnt)
-
-    #             cv2.drawContours(fgmask, [cnt], 0, (255,255,255), 3, maxLevel = 0)
-
-    #             if h < w:
-    #                 j += 1
-            
-    #             if j > 10:
-
-    #                 cv2.putText(fgmask, 'FALL', (x, y), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255,255,255), 2)
-    #                 cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
-    #                 print("Fall detected")
-    #                 count=1
-                
-    #             if h > w:
-    #                 j = 0 
-    #                 cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-    #                 fall=0
-
-    #             cv2.imshow('video', frame)
-    
-    #             if cv2.waitKey(33) == 27:
-    #                 break
-
-    #             if count==1 and fall==0:
-    #                 message = client.messages.create(
-    #                           body='ALERT!!! FALL DETECTED!!!',
-    #                           from_='whatsapp:+14155238886',
-    #                           to='whatsapp:+919892938847'
-    #                       )
-    #                 fall=1
-
-    # cap.release()
-
-    # cv2.destroyAllWindows()
-    return render_template('viewcamera.html', title='Camera')
 
 @app.route("/update/", methods=['POST'])
 def update_profile():
@@ -170,14 +116,17 @@ def login():
     form = signinform()
     if form.validate_on_submit():
         login = {
+            u'uname': form.uname.data,
             u'email': form.email.data,
             u'password': form.password.data
         }
-        auth.create_user_with_email_and_password(form.email.data, form.password.data)
-        flash(f'You have been logged in', 'success')
+        auth.sign_in_with_email_and_password(form.email.data, form.password.data)
+        flash(f'You have been logged in {form.uname.data}!', 'success')
         return redirect(url_for('dashboard'))
     else:
         print("Login Unsuccessful. Please check username and password")
+        # flash(f'Invalid login. Register!', 'danger')
+        # return redirect(url_for('login'))
     return render_template('login.html', title='Login', form=form)
 
 

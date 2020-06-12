@@ -37,6 +37,21 @@
   <body>
     <center>
 <div class = "content-section" style="width: 500px; height: fit-content; margin-top: 110px;">
+    <main role="main" class="container" style="margin-left: 90px;">
+        <div class="row">
+          <div class="col-md-8">
+              {% with messages =  get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+              {% endif %}
+              {% endwith %}
+          </div>       
+        </div>
+      </main>
     <form id="signinform" method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">

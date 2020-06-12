@@ -77,7 +77,7 @@
       <body>
         <div class="sidenav">
           <form action="/viewcamera/" method="post">
-            <button name="view" type="submit" style="cursor: pointer; color:grey; background-color: black; font-size: 23px; border-color: black;">
+            <button name="view" type="submit" href="{{ url_for('viewcamera') }}" style="cursor: pointer; color:grey; background-color: black; font-size: 23px; border-color: black;">
               View Surviellance
             </button>
             {{ view_message }} 
